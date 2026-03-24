@@ -1,13 +1,6 @@
 variable "project_name" {
     type = string
     description = "Name of the project"
-
-    default = "threat-composer"
-}
-
-variable "aws_region" {
-    type = string
-    description = "AWS Region"
 }
 
 variable "vpc_cidr" {
