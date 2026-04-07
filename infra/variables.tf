@@ -29,3 +29,13 @@ variable "private_subnet_cidr" {
   type        = list(string)
   description = "List of CIDR for Private Subnets"
 }
+
+variable "domain_name" {
+  type        = string
+  description = "Name of the domain"
+}
+
+variable "container_port" {
+    type = number
+    description = "The port for the containers"
+}
