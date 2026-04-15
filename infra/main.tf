@@ -32,3 +32,25 @@ module "acm" {
   project_name      = var.project_name
   domain_name       = var.domain_name
 }
+
+module "ecs" {
+  source = "./modules/ecs"
+
+  project_name = var.project_name
+  ecs_task_execution_arn = module.iam.ecs_task_execution_arn
+  ecs_task_role_arn = module.iam.ecs_task_role_arn
+  container_port = var.container_port
+  image_url = module.ecr.image_url
+}
+
+module "iam" {
+  source = "./modules/iam"
+
+  project_name = var.project_name
+}
+
+module "ecr" {
+  source = "./modules/ecr"
+
+  project_name = var.project_name
+}

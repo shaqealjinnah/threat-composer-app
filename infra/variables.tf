@@ -36,6 +36,6 @@ variable "domain_name" {
 }
 
 variable "container_port" {
-    type = number
-    description = "The port for the containers"
+  type = number
+  description = "The port for the containers"
 }
