@@ -27,20 +27,26 @@ module "alb" {
 }
 
 module "acm" {
-  source = "./modules/acm" 
+  source = "./modules/acm"
 
-  project_name      = var.project_name
-  domain_name       = var.domain_name
+  project_name = var.project_name
+  domain_name  = var.domain_name
 }
 
 module "ecs" {
   source = "./modules/ecs"
 
-  project_name = var.project_name
+  project_name           = var.project_name
   ecs_task_execution_arn = module.iam.ecs_task_execution_arn
-  ecs_task_role_arn = module.iam.ecs_task_role_arn
-  container_port = var.container_port
-  image_url = module.ecr.image_url
+  ecs_task_role_arn      = module.iam.ecs_task_role_arn
+  container_port         = var.container_port
+  image_url              = module.ecr.image_url
+  ecs_sg_id              = module.security.ecs_sg_id
+  private_subnet_ids     = module.networking.private_subnet_ids
+  target_group_arn       = module.alb.target_group_arn
+  desired_count          = var.desired_count
+  http_listener_arn      = module.alb.http_listener_arn
+  https_listener_arn     = module.alb.https_listener_arn
 }
 
 module "iam" {

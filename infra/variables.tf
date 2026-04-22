@@ -36,6 +36,11 @@ variable "domain_name" {
 }
 
 variable "container_port" {
-  type = number
+  type        = number
   description = "The port for the containers"
+}
+
+variable "desired_count" {
+  type        = number
+  description = "Number of ECS Instances"
 }
