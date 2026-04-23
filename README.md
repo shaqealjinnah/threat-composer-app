@@ -49,3 +49,7 @@ threat-composer-app/
 |
 ├── images/
 └── README.md
+
+## Live Site
+
+![Gif of running app](./images/threat-composer-demo.gif)
