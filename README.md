@@ -49,6 +49,7 @@ threat-composer-app/
 |
 ├── images/
 └── README.md
+```
 
 ## Live Site
 
