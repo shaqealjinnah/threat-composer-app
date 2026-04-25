@@ -30,9 +30,9 @@ This project deploys a Threat Composer App (an open-source threat modeling ecosy
 - ECS Tasks in private subnets
 
 **Compute:**
-- ECS Fargate cluster with 2 tasks
+- ECS cluster with 2 tasks
 - Docker image stored in ECR
-- Terraform remote back in S3
+- Serverless compute with Fargate
 
 
 ## Project Structure
