@@ -15,14 +15,25 @@ This project deploys a Threat Composer App (an open-source threat modeling ecosy
 
 ## Architecture
 
-### High-level flow:
+![Architecture Diagram](./images/cloud_architecture.png)
 
-1. Infrastructure is provisioned using Terraform:
-    - Custom VPC with public/private subnets
-    - Networking components (routing, gateways)
-2. Application is containerised using Docker
-3. Containers are deployed to AWS container-based services via ECR
-4. Scripts are used to automate parts of the workflow
+### Key Components
+
+**Network:**
+- VPC (10.0.0.0/16) across 2 availability zones
+- Internet Gateway and NAT Gateway
+- 2 Public subnets for ALB
+
+**Security:**
+- Security groups (ALB -> ECS)
+- IAM roles with least privilege
+- ECS Tasks in private subnets
+
+**Compute:**
+- ECS Fargate cluster with 2 tasks
+- Docker image stored in ECR
+- Terraform remote back in S3
+
 
 ## Project Structure
 
