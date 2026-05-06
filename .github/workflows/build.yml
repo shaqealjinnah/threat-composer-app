@@ -22,5 +22,5 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -tag ${{ env.ECR_REPOSITORY}}:${{ github.sha}} .
-          
+          docker build -t ${{ env.ECR_REPOSITORY}}:${{ github.sha}} -f app/Dockerfile app
+
