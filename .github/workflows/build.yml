@@ -9,8 +9,8 @@ permissions:
   contents: read
 
 env:
-  AWS_REGION: ap-southeast-2
-  ECR_REPOSITORY: my-app
+  AWS_REGION: ${{ secrets.AWS_REGION}}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
 
 jobs:
   build-and-push:
@@ -31,3 +31,19 @@ jobs:
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
+        id: ecr-login
+
+      - name: Push to ECR
+        env:
+          ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
+        run: |
+          docker tag ${{ env.ECR_REPOSITORY}}:${{github.sha}} \
+            ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+
+          docker tag ${{ env.ECR_REPOSITORY}}:${{github.sha}} \
+            ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY }}:latest
+
+          docker push ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}:${{ github.sha }}
+          docker push ${{ env.ECR_REGISTRY}}/${{ env.ECR_REPOSITORY}}:latest
+
+          echo "### Image pushed :white_check_mark:" >> $GITHUB_STEP_SUMMARY
