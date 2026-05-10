@@ -63,6 +63,10 @@ resource "aws_ecs_service" "app" {
         target_group_arn = var.target_group_arn
     }
 
+    lifecycle {
+        ignore_changes = [task_definition]
+    }
+
     depends_on = [var.http_listener_arn, var.https_listener_arn]
 
     tags = {
