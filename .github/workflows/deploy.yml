@@ -45,6 +45,7 @@ jobs:
   deploy:
     needs: auth
     uses: ./.github/workflows/reusable-ecs-deploy.yml
+    secrets: inherit
     with:
       cluster: threat-composer--ecs-cluster
       service: threat-composer--ecs-service

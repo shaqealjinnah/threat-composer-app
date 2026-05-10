@@ -39,6 +39,11 @@ jobs:
       task_def_arn: ${{ steps.register-task-def.outputs.arn }}
 
     steps:
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ inputs.aws_region }}
       # Fetch the current task definition from ECS
       # We always fetch live state so we don't lose env vars, CPU, memory etc.
       - name: Download current task definition
