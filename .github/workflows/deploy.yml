@@ -13,11 +13,16 @@ permissions:
 env:
   AWS_REGION: ${{ secrets.AWS_REGION }}
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  ECS_CLUSTER: threat-composer--ecs-cluster
+  ECS_SERVICE: threat-composer--ecs-service
+  CONTAINER_NAME: app
 
 jobs:
   auth:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    outputs:
+      image: ${{ steps.image.outputs.uri }}
 
     steps:
       - name: Configure AWS Credentials (OIDC)
@@ -35,6 +40,14 @@ jobs:
         env:
           ECR_REGISTRY: ${{ steps.ecr-login.outputs.registry }}
         run: |
-            echo "uri=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
-    
-    
+          echo "uri=${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY}}:${{ github.event.workflow_run.head_sha }}" >> $GITHUB_OUTPUT
+
+  deploy:
+    needs: auth
+    uses: ./.github/workflows/reusable-ecs-deploy.yml
+    with:
+      cluster: threat-composer--ecs-cluster
+      service: threat-composer--ecs-service
+      container_name: app
+      image: ${{ needs.auth.outputs.image }}
+      aws_region: ap-southeast-2
