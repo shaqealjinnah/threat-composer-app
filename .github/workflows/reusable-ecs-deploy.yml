@@ -26,6 +26,10 @@ on:
         required: false
         type: string
         default: 'ap-southeast-2'
+      task_definition:
+        description: 'Family of task definition'
+        required: true
+        type: string
     outputs:
       task_definition_arn:
         description: 'ARN of the newly registered task definition'
@@ -49,7 +53,7 @@ jobs:
       - name: Download current task definition
         run: |
           aws ecs describe-task-definition \
-            --task-definition ${{ inputs.service }} \
+            --task-definition ${{ inputs.task_definition }} \
             --query 'taskDefinition' \
             --output json > task-def.json
 
@@ -66,14 +70,18 @@ jobs:
 
       # Swap the image for the specified container
       - name: Update image in task definition
+        env:
+          IMAGE: ${{ inputs.image }}
+          CONTAINER: ${{ inputs.container_name }}
+
         run: |
           cat clean-task-def.json | jq \
-            --arg image "${{ inputs.image }}" \
-            --arg container "${{ inputs.container_name }}" \
+            --arg image "$IMAGE" \
+            --arg container "$CONTAINER_NAME" \
             '(.containerDefinitions[] | select(.name == $container) | .image) = $image' \
             > updated-task-def.json
 
-          echo "Updated ${{ inputs.container_name }} to ${{ inputs.image }}"
+          echo "Updated $CONTAINER_NAME to $IMAGE"
 
       # Register a new immutable revision
       - name: Register new task definition
@@ -108,9 +116,11 @@ jobs:
           echo "Deployment complete."
 
       - name: Deployment summary
+        env:
+          IMAGE: ${{ inputs.image }}
         run: |
           echo "### Deployment complete :rocket:" >> $GITHUB_STEP_SUMMARY
           echo "**Cluster:** \`${{ inputs.cluster }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Service:** \`${{ inputs.service }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Image:** \`${{ inputs.image }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`$IMAGE\`" >> $GITHUB_STEP_SUMMARY
           echo "**Task Definition:** \`${{ steps.register-task-def.outputs.arn }}\`" >> $GITHUB_STEP_SUMMARY

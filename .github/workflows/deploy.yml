@@ -52,3 +52,4 @@ jobs:
       container_name: app
       image: ${{ needs.auth.outputs.image }}
       aws_region: ap-southeast-2
+      task_definition: main
