@@ -63,6 +63,7 @@ resource "aws_ecs_service" "app" {
         target_group_arn = var.target_group_arn
     }
 
+    # Let CI/CD control task definition state
     lifecycle {
         ignore_changes = [task_definition]
     }
