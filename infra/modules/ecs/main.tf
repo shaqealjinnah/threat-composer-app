@@ -4,7 +4,7 @@ resource "aws_ecs_cluster" "main" {
 
     setting {
         name  = "containerInsights"
-        value = "disabled"
+        value = "enabled"
     }
 
     tags = {
@@ -35,6 +35,16 @@ resource "aws_ecs_task_definition" "main" {
                     hostPort = var.container_port
                 }
             ]
+
+            logConfiguration = {
+                logDriver = "awslogs"
+
+                options = {
+                    awslogs-group         = "/ecs/${var.project_name}"
+                    awslogs-region        = "ap-southeast-2"
+                    awslogs-stream-prefix = "ecs"
+                }
+            }
         }])
 
     tags = {
@@ -73,4 +83,10 @@ resource "aws_ecs_service" "app" {
     tags = {
         Name = "${var.project_name}--ecs-service"
     }
+}
+
+# Add CloudWatch for logs
+resource "aws_cloudwatch_log_group" "ecs" {
+  name              = "/ecs/${var.project_name}"
+  retention_in_days = 7
 }
