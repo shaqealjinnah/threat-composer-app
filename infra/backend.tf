@@ -3,6 +3,7 @@ terraform {
   backend "s3" {
     bucket       = "threat-composer-tfbucket"
     key          = "threat-composer-tfbucket/terraform.tfstate"
+    encrypt      = true
     use_lockfile = true
     region       = "ap-southeast-2"
   }

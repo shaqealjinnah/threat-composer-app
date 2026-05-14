@@ -40,7 +40,7 @@ module "ecs" {
   ecs_task_execution_arn = module.iam.ecs_task_execution_arn
   ecs_task_role_arn      = module.iam.ecs_task_role_arn
   container_port         = var.container_port
-  image_url              = module.ecr.image_url
+  ecr_repository_url     = var.ecr_repository_url
   ecs_sg_id              = module.security.ecs_sg_id
   private_subnet_ids     = module.networking.private_subnet_ids
   target_group_arn       = module.alb.target_group_arn
@@ -51,12 +51,6 @@ module "ecs" {
 
 module "iam" {
   source = "./modules/iam"
-
-  project_name = var.project_name
-}
-
-module "ecr" {
-  source = "./modules/ecr"
 
   project_name = var.project_name
 }

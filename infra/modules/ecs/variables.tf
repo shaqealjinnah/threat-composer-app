@@ -18,9 +18,9 @@ variable "container_port" {
     description = "Port number of the container"
 }
 
-variable "image_url" {
+variable "ecr_repository_url" {
     type = string
-    description = "Docker image URL"
+    description = "URL of ECR repository"
 }
 
 variable "ecs_sg_id" {

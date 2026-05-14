@@ -44,3 +44,8 @@ variable "desired_count" {
   type        = number
   description = "Number of ECS Instances"
 }
+
+variable "ecr_repository_url" {
+  type        = string
+  description = "URL of ECR Repository"
+}
