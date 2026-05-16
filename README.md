@@ -22,7 +22,7 @@ This project deploys a Threat Composer App (an open-source threat modeling ecosy
 
 ## Architecture
 
-![Architecture Diagram](./images/cloud_architecture.png)
+![Architecture Diagram](./images/architecture-diagram.png)
 
 ### High Level Flow
 
@@ -107,11 +107,14 @@ threat-composer-app/
 |   └── modules
 |       ├── acm/
 |       ├── alb/
-|       ├── ecr/
 |       ├── ecs/
 |       ├── iam/
 |       ├── networking/
 |       └── security/
+| 
+├── bootstrap/
+|   ├── chicken-egg
+|   └── oidc
 |
 ├── .github/workflows
 |   ├── build.yml
@@ -125,8 +128,9 @@ threat-composer-app/
 ## How to Reproduce
 
 ### Requirements
-- IAM role with least privileges
+- AWS account
 - Terraform v1+
+- Node v20+
 - Docker Desktop
 - Domain managed by DNS
 
@@ -175,7 +179,26 @@ docker push \
 <aws_account_id>.dkr.ecr.<region>.amazonaws.com/<repository:tag>
 ```
 
-### 4. Create cloud infrastructure with Terraform
+### 4. Configure Variables
+
+#### Update tfvars file with your variables
+
+```
+cp terraform.example-tfvars terraform.tfvars
+vim terraform.tfvars
+```
+
+### 5. Initiate Bootstrap
+
+```
+cd ~/threat-composer-app/chicken-egg
+
+terraform init
+terraform plan
+terraform apply
+```
+
+### 6. Deploy Infrastructure
 
 ```
 cd ~/threat-composer-app/infra
@@ -183,6 +206,18 @@ cd ~/threat-composer-app/infra
 terraform init
 terraform plan
 terraform apply
+```
+
+### 7. CI/CD Automation
+
+#### Add GitHub Action secrets
+
+```
+AWS_REGION=<your-region>
+
+ECR_REPOSITORY=<ecr-repository-url> # Check ~/threat-composer/bootstrap/chicken-egg/outputs.tf
+
+AWS_ROLE_ARN=<role-arn>             # Check ~/threat-composer/bootstrap/oidc/outputs.tf
 ```
 
 ## Live Site
@@ -193,4 +228,4 @@ terraform apply
 - Blue/Green ECS deployments
 - WAF integration
 - ECS auto-scaling
-- Logging with Cloudwatch
+- CloudFront for CDN

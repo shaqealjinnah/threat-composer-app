@@ -1,0 +1,12 @@
+aws_region  = "your-region"
+github_org  = "github-username"
+github_repo = "repo-name"
+
+# IMPORTANT: scope this to your repo and branches
+allowed_subjects = [
+  "repo:<github-user>/<repo-name>:ref:refs/heads/main",
+]
+
+ecr_repository_name          = "ecr-repo-name"
+ecs_task_execution_role_name = "ecsTaskExecutionRole"
+ecs_task_role_name           = "ecsTaskRole"

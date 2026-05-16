@@ -1,0 +1,10 @@
+project_name        = "project-name"
+aws_region          = "your-region"
+vpc_cidr            = "cidr-block"
+availability_zones  = ["availability-zone-1", "availability-zone-2"]
+public_subnet_cidr  = ["public-cidr-1", "public-cidr-2"]
+private_subnet_cidr = ["private-cidr-1", "private-cidr-2"]
+container_port      = port-number
+domain_name         = "your-domain"
+desired_count       = task-number
+ecr_repository_url  = "ecr-url"
